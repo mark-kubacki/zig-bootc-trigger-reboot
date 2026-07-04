@@ -1,0 +1,4 @@
+release/
+.zig-cache/
+
+check-bootc-and-reboot

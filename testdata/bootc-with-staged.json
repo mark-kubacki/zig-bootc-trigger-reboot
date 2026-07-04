@@ -1,0 +1,61 @@
+{
+  "apiVersion": "org.containers.bootc/v1",
+  "kind": "BootcHost",
+  "metadata": {
+    "name": "host"
+  },
+  "spec": {
+    "bootOrder": "default",
+    "image": null
+  },
+  "status": {
+    "booted": {
+      "cachedUpdate": null,
+      "composefs": null,
+      "downloadOnly": false,
+      "image": null,
+      "incompatible": true,
+      "ostree": {
+        "checksum": "15b4f6443f7a60b9b07e8695ac7b0f26982c74a2f7948fa256127a3520785f63",
+        "deploySerial": 0,
+        "stateroot": "fedora-coreos"
+      },
+      "pinned": false,
+      "softRebootCapable": true,
+      "store": "ostreeContainer"
+    },
+    "rollback": {
+      "cachedUpdate": null,
+      "composefs": null,
+      "downloadOnly": false,
+      "image": null,
+      "incompatible": true,
+      "ostree": {
+        "checksum": "30e872bf04d75ab632860d81f4c64c0d14d752c9045061e5d85e12d54c72b5ca",
+        "deploySerial": 0,
+        "stateroot": "fedora-coreos"
+      },
+      "pinned": false,
+      "softRebootCapable": false,
+      "store": "ostreeContainer"
+    },
+    "rollbackQueued": false,
+    "staged": {
+      "cachedUpdate": null,
+      "composefs": null,
+      "downloadOnly": false,
+      "image": null,
+      "incompatible": true,
+      "ostree": {
+        "checksum": "d619fb11e180da2c0d8db205ab66a9a077bdbea5e1bcc07cf52e0836411c69d0",
+        "deploySerial": 0,
+        "stateroot": "fedora-coreos"
+      },
+      "pinned": false,
+      "softRebootCapable": false,
+      "store": "ostreeContainer"
+    },
+    "type": null,
+    "usrOverlay": null
+  }
+}
