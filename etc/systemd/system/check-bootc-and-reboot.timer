@@ -1,0 +1,12 @@
+[Unit]
+Description=Timer for restarts on pending bootc deployments
+Conflicts=zincati.service
+
+[Timer]
+OnBootSec=1h
+OnUnitInactiveSec=8h
+Persistent=true
+AccuracySec=1h
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,8 @@
+[Unit]
+Description=Trigger a reboot on a pending bootc deployment
+After=rpm-ostreed-automatic.service
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/local/sbin/check-bootc-and-reboot
