@@ -14,7 +14,7 @@ and *call overhead*.
 A variant written in Python has been published here:
 [github.com/pauldoo/chicken::content/…/bootc-check-and-reboot](https://github.com/pauldoo/chicken/blob/efe1634274866eb8a4f278d546760a3834a77cb6/content/usr/libexec/bootc-check-and-reboot)
 
-→ Zig 0.16 compiles these ~50 LOC to about 155 kiB that run within ~50ms.  
+→ Zig 0.16 compiles these ~50 LOC to about 128 kiB that run within ~50ms.  
 This handily beats any implementation in Python on *call overhead* of its interpreter alone.
 
 As aside: We could have parsed the JSON into dynamic objects like it’s with Python

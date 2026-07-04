@@ -2,22 +2,21 @@ const std = @import("std");
 const Allocator = std.mem.Allocator;
 
 pub fn main(init: std.process.Init) u8 {
-    const allocator: Allocator = init.arena.allocator();
+    const mem = init.arena.allocator();
+    defer _ = init.arena.deinit();
     const io = init.io;
 
-    const output = std.process.run(allocator, io, .{
+    const output = std.process.run(mem, io, .{
         .argv = &.{ "/usr/bin/bootc", "status", "--json" },
     }) catch {
         return 5; // ExitNotInstalled
     };
     // XXX: check output.term
 
-    const need_reboot = hasBootcAnythingStaged(allocator, output.stdout) catch {
+    const need_reboot = hasBootcAnythingStaged(mem, output.stdout) catch {
         std.Io.File.stderr().writeStreamingAll(io, output.stderr) catch {};
         return 6; // ExitNotConfigured
     };
-    allocator.free(output.stdout);
-    allocator.free(output.stderr);
     if (!need_reboot) {
         std.Io.File.stdout().writeStreamingAll(io, "Nothing staged") catch {};
         return 0; // ExitOK
@@ -32,29 +31,19 @@ pub fn main(init: std.process.Init) u8 {
 }
 
 // Returns true based on the output of `bootc --json`.
-fn hasBootcAnythingStaged(allocator: Allocator, output: []const u8) !bool {
-    const bootcStatus = struct {
-        pinned: bool,
-        store: []u8,
-    };
-    const bootcOutput = struct {
+fn hasBootcAnythingStaged(mem: Allocator, output: []const u8) !bool {
+    const BootcStatus = struct {};
+    const BootcOutput = struct {
         status: struct {
-            booted: bootcStatus,
-            staged: ?bootcStatus = null,
+            booted: BootcStatus, // Tripwire so we have the expected structure.
+            staged: ?BootcStatus = null,
         },
     };
 
-    const parsed = try std.json.parseFromSlice(
-        bootcOutput,
-        allocator,
-        output,
-        .{
-            .ignore_unknown_fields = true,
-        },
-    );
-    defer parsed.deinit();
-
-    return parsed.value.status.staged != null;
+    const bootc = try std.json.parseFromSliceLeaky(BootcOutput, mem, output, .{
+        .ignore_unknown_fields = true,
+    });
+    return bootc.status.staged != null;
 }
 
 test "bootc json parse" {

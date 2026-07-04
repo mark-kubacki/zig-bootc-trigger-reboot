@@ -2,7 +2,7 @@
 
 exec \
 zig build-exe \
-    .\check-bootc-and-reboot.zig \
+    check-bootc-and-reboot.zig \
     -O ReleaseSmall \
     -dead_strip \
     -fstrip \
