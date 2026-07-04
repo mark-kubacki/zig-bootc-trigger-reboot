@@ -1,37 +1,34 @@
 const std = @import("std");
-const Allocator = std.mem.Allocator;
 
 pub fn main(init: std.process.Init) u8 {
     const mem = init.arena.allocator();
     defer _ = init.arena.deinit();
-    const io = init.io;
 
-    const output = std.process.run(mem, io, .{
+    const output = std.process.run(mem, init.io, .{
         .argv = &.{ "/usr/bin/bootc", "status", "--json" },
     }) catch {
         return 5; // ExitNotInstalled
     };
-    // XXX: check output.term
 
     const need_reboot = hasBootcAnythingStaged(mem, output.stdout) catch {
-        std.Io.File.stderr().writeStreamingAll(io, output.stderr) catch {};
+        std.Io.File.stderr().writeStreamingAll(init.io, output.stderr) catch {};
         return 6; // ExitNotConfigured
     };
     if (!need_reboot) {
-        std.Io.File.stdout().writeStreamingAll(io, "Nothing staged") catch {};
+        std.Io.File.stdout().writeStreamingAll(init.io, "Nothing staged") catch {};
         return 0; // ExitOK
     }
 
-    std.process.replace(io, .{
+    std.process.replace(init.io, .{
         .argv = &.{ "/usr/bin/systemctl", "reboot" },
     }) catch {
-        std.Io.File.stdout().writeStreamingAll(io, "Needs a reboot") catch {};
+        std.Io.File.stdout().writeStreamingAll(init.io, "Needs a reboot") catch {};
         return 1; // ExitFailure
     };
 }
 
 // Returns true based on the output of `bootc --json`.
-fn hasBootcAnythingStaged(mem: Allocator, output: []const u8) !bool {
+fn hasBootcAnythingStaged(mem: std.mem.Allocator, output: []const u8) !bool {
     const BootcStatus = struct {};
     const BootcOutput = struct {
         status: struct {
