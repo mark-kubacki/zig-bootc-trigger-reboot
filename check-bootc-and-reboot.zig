@@ -1,5 +1,9 @@
 const std = @import("std");
 
+pub const std_options: std.Options = .{
+    .networking = false,
+};
+
 pub fn main(init: std.process.Init) u8 {
     const mem = init.arena.allocator();
     defer _ = init.arena.deinit();
