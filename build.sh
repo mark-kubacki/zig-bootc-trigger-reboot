@@ -8,4 +8,5 @@ zig build-exe \
     -fstrip \
     -fsingle-threaded \
     -fno-unwind-tables \
+    --stack 0 \
     -target x86_64-linux
