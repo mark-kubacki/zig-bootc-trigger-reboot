@@ -1,4 +1,5 @@
 const std = @import("std");
+pub const panic = @import("std").debug.no_panic;
 
 pub const std_options: std.Options = .{
     .networking = false,
